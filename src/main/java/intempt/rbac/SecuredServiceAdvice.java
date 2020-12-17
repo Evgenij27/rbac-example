@@ -21,14 +21,14 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class SecuredServiceAdvice {
 
-    @Pointcut("@annotation(preSecuredByName)")
-    public void preSecuredServicePointcut(PreSecuredByName preSecuredByName) {}
 
 
-    @Around("preSecuredServicePointcut(preSecuredByName)")
-    public Object preSecured(ProceedingJoinPoint pjp, PreSecuredByName preSecuredByName) throws Throwable {
-        log.info("Before advice");
+    @Pointcut("@annotation(preSecuredByName) && args(name)")
+    public void preSecuredServicePointcut(PreSecuredByName preSecuredByName, String name) {}
 
+
+    @Around("preSecuredServicePointcut(preSecuredByName, name)")
+    public Object preSecured(ProceedingJoinPoint pjp, PreSecuredByName preSecuredByName, String name) throws Throwable {
         MethodSignature method = (MethodSignature) pjp.getSignature();
         final Class<?> returnType = method.getReturnType();
 
